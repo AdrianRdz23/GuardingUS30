@@ -1,0 +1,42 @@
+﻿@model List<GuardingUS30.Models.UserRoleModel>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Role Catalog</title>
+</head>
+<body>
+    <h4>USERS</h4>
+    <hr />
+    <table cellpadding="0" cellspacing="0" style="width:70%">
+        <tr>
+            <th>IDUSER</th>
+            <th>NAME</th>
+            <th>PHONENUMBER</th>
+            <th>EMAIL</th>
+            <th>ROLE</th>
+
+        </tr>
+
+        @foreach (UserRoleModel user in Model)
+        {
+            <tr>
+                <td>@user.userModel.iduser</td>
+                <td>@user.userModel.name</td>
+                <td>@user.userModel.phonenumber</td>
+                <td>@user.userModel.email</td>
+                <td>@user.roleModel.name</td>
+                <td><a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="EditUserView" asp-route-id="@user.userModel.iduser">Edit</a></td>
+                <td><a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="DeleteUser" asp-route-id="@user.userModel.iduser">Delete</a></td>
+            </tr>
+        }
+
+    </table>
+
+    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="AddUserView">Add a User</a>
+
+</body>
+</html>

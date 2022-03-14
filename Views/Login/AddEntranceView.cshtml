@@ -1,0 +1,119 @@
+﻿@model GuardingUS30.Models.VisitorsHomeModel
+
+
+<h4>VisitorModel</h4>
+<hr />
+@{
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var items = "<option value='0'>Select</option>";
+            $('#home_number').html(items);
+        });
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#home_address').change(function () {
+                var url = '@Url.Content("~/")' + "Login/GetVisitorHomelist";
+                var ddlsource = "#home_address";
+                $.getJSON(url, { address: $(ddlsource).val() }, function (data) {
+                    var items = '';
+                    $("#home_number").empty();
+                    $.each(data, function (i, visitor) {
+                        items += "<option value='" + visitor.value + "'>" + visitor.text + "</option>";
+                    });
+                    $('#home_number').html(items);
+                });
+            });
+        });
+    </script>
+
+}
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddEntranceProcess">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="visitors.idvisitor" class="control-label"></label>
+                <input asp-for="visitors.idvisitor" class="form-control" />
+                <span asp-validation-for="visitors.idvisitor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="visitors.name" class="control-label"></label>
+                <input asp-for="visitors.name" class="form-control" />
+                <span asp-validation-for="visitors.name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="visitors.carPlate" class="control-label"></label>
+                <input asp-for="visitors.carPlate" class="form-control" />
+                <span asp-validation-for="visitors.carPlate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="home.address" class="control-label">Address</label>
+                <select asp-for="home.address" id="home_address" name="home_address" class="form-control" asp-items="@(new SelectList(ViewBag.ListofHome,"address"))">
+                </select>
+                <span asp-validation-for="home.address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="visitors.idhome" class="control-label">Number</label>
+                <select asp-for="visitors.idhome" id="home_number" name="home_number" class="form-control" asp-items="@(new SelectList(string.Empty,"idhome","number"))">
+                </select>
+                <span asp-validation-for="visitors.idhome" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="visitors.entrance" class="control-label"></label>
+                <input asp-for="visitors.entrance" class="form-control" />
+                <span asp-validation-for="visitors.entrance" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="visitors.exit" class="control-label"></label>
+                <input asp-for="visitors.exit" class="form-control" />
+                <span asp-validation-for="visitors.exit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="visitors.identification" class="control-label"></label>
+                <input asp-for="visitors.identification" class="form-control" />
+                <span asp-validation-for="visitors.identification" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="visitors.description" class="control-label"></label>
+                <input asp-for="visitors.description" class="form-control" />
+                <span asp-validation-for="visitors.description" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check" hidden>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="visitors.status" /> @Html.DisplayNameFor(model => model.visitors.status)
+                </label>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="visitors.startDate" class="control-label"></label>
+                <input asp-for="visitors.startDate" class="form-control" />
+                <span asp-validation-for="visitors.startDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="visitors.modificationDate" class="control-label"></label>
+                <input asp-for="visitors.modificationDate" class="form-control" />
+                <span asp-validation-for="visitors.modificationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+}

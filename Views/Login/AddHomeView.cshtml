@@ -1,0 +1,69 @@
+﻿@model GuardingUS30.Models.UserHomeModel
+
+<h4>HomeModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddHomeProcess">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="homeModel.idhome" class="control-label"></label>
+                <input asp-for="homeModel.idhome" class="form-control" />
+                <span asp-validation-for="homeModel.idhome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="homeModel.number" class="control-label"></label>
+                <input asp-for="homeModel.number" class="form-control" />
+                <span asp-validation-for="homeModel.number" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="homeModel.cars" class="control-label"></label>
+                <input asp-for="homeModel.cars" class="form-control" />
+                <span asp-validation-for="homeModel.cars" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="homeModel.address" class="control-label"></label>
+                <input asp-for="homeModel.address" class="form-control" />
+                <span asp-validation-for="homeModel.address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="homeModel.iduser" class="control-label"></label>
+                <select asp-for="homeModel.iduser" class="form-control">
+                    @foreach (string[] user in Model.homeModelNames)
+                    {
+                        <option value="@user[0]">@user[1]</option>
+                    }
+                </select>
+                <input type="hidden" asp-for="homeModelNames" />
+                <span asp-validation-for="homeModel.iduser" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check" hidden>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="homeModel.status" /> @Html.DisplayNameFor(model => model.homeModel.status)
+                </label>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="homeModel.startDate" class="control-label"></label>
+                <input asp-for="homeModel.startDate" class="form-control" />
+                <span asp-validation-for="homeModel.startDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="homeModel.modificationDate" class="control-label"></label>
+                <input asp-for="homeModel.modificationDate" class="form-control" />
+                <span asp-validation-for="homeModel.modificationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

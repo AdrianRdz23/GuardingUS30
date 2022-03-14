@@ -1,0 +1,32 @@
+﻿@model List<GuardingUS30.Models.RoleModel>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Role Catalog</title>
+</head>
+<body>
+    <h4>Roles</h4>
+    <hr />
+    <table cellpadding="0" cellspacing="0" id="tablerole" style="width:70%">
+        <tr>
+            <th>Role ID</th>
+            <th>Name</th>
+
+
+        </tr>
+        @foreach (RoleModel role in Model)
+        {
+    <tr>
+        <td>@role.idrole</td>
+        <td>@role.name</td>
+
+    </tr>
+        }
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+﻿@model GuardingUS30.Models.UserModel
+<div>
+    <h4>The user has been logged in successfully</h4>
+    <hr />
+    <dl class="row">
+        <!--This would display the Name and the password-->
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.password)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.password)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.idrole)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.idrole)
+        </dd>
+    </dl>
+</div>
+<div>
+
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,33 @@
+﻿@model GuardingUS30.Models.UserModel
+    <head>
+        <style>
+            .center {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 200px;
+                
+            }
+        </style>
+    </head>
+    <div>
+        <h4>Resident View</h4>
+        <hr />
+
+        <h1>Welcome to the GuardingUS App</h1>
+
+        <div class="center">
+            <a asp-controller="Login" asp-action="RoleList">Administrating Roles</a>        
+        </div>
+        <div class="center">
+            <a asp-controller="Login" asp-action="UserList">Administrating Users</a>
+        </div>
+        <div class="center">
+            <a asp-controller="Login" asp-action="HomeList">Administrating Homes</a>
+        </div>
+
+    </div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>

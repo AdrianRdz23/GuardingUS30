@@ -1,0 +1,40 @@
+﻿@model GuardingUS30.Models.VisitorModel
+
+<div>
+    <h4>VisitorModel</h4>
+    <hr />
+
+    <table cellpadding="0" cellspacing="0" style="width:70%">
+        <tr>
+            <th>Visitor's Name'</th>
+            <th>Car Plate </th>
+            <th>Identification</th>
+            <th>Address</th>
+            <th>Entrance</th>
+            <th>Exit</th>
+
+
+
+        </tr>
+
+        <!--foreach (VisitorModel visitor in Model)
+        {
+            <tr>
+                <td>Visitor's Name'</td>
+                <td>Car Plate </td>
+                <td>Identification</td>
+                <td>Address</td>
+                <td>Exit</td>
+            </tr>
+
+        }-->
+
+    </table>
+
+
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
+

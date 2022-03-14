@@ -1,0 +1,76 @@
+﻿@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+@model GuardingUS30.Models.UserRoleModel
+
+
+
+<h4>UserModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditUserProcess">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="userModel.iduser" class="control-label"></label>
+                <input asp-for="userModel.iduser" class="form-control" />
+                <span asp-validation-for="userModel.iduser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userModel.name" class="control-label"></label>
+                <input asp-for="userModel.name" class="form-control" />
+                <span asp-validation-for="userModel.name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userModel.password" class="control-label"></label>
+                <input asp-for="userModel.password" class="form-control" />
+                <span asp-validation-for="userModel.password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userModel.email" class="control-label"></label>
+                <input asp-for="userModel.email" class="form-control" />
+                <span asp-validation-for="userModel.email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userModel.phonenumber" class="control-label"></label>
+                <input asp-for="userModel.phonenumber" class="form-control" />
+                <span asp-validation-for="userModel.phonenumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userModel.idrole" class="control-label"></label>
+                <select asp-for="userModel.idrole" class="form-control">
+                    @foreach (string[] role in Model.roleModelNames) {
+                        <option value="@role[0]">@role[1]</option>
+                    }
+                </select> 
+                <input type="hidden" asp-for="roleModelNames" />
+
+                <span asp-validation-for="userModel.idrole" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check" hidden>
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="userModel.status" /> @Html.DisplayNameFor(model => model.userModel.status)
+                </label>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="userModel.startDate" class="control-label"></label>
+                <input asp-for="userModel.startDate" class="form-control" />
+                <span asp-validation-for="userModel.startDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="userModel.modificationDate" class="control-label"></label>
+                <input asp-for="userModel.modificationDate" class="form-control" />
+                <span asp-validation-for="userModel.modificationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
