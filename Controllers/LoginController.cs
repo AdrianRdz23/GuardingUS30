@@ -382,6 +382,7 @@ namespace GuardingUS30.Controllers
         
         
         [HttpPost]
+        //Method to be able to get all the visitor's information (including the idhome)
         public IActionResult AddEntranceView(IFormCollection formCollection)
         {
            
