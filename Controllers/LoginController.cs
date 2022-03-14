@@ -347,17 +347,19 @@ namespace GuardingUS30.Controllers
             return View(vhm);
         }
 
-        
+
+        //Action to go to add entrance View
         public IActionResult AddEntranceView()
         {
 
             List<String> addresslist = new List<String>();
 
+            //Get all the addresses of the home table (non-repeatable names of the address)
             foreach (var address in _context.Home.GroupBy(p => p.address).Select(p => new { address = p.Key }).ToArray())
             {
                 addresslist.Add(address.address);
             }
-            
+
 
 
             ViewBag.ListofHome = addresslist;
@@ -366,7 +368,7 @@ namespace GuardingUS30.Controllers
         }
 
 
-
+        //Mehtod to select the number of home once the address has been selected first
         public JsonResult GetVisitorHomelist(string address)
         {
             
