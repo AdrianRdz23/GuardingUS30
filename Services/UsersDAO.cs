@@ -17,6 +17,8 @@ namespace GuardingUS30.Services
         {
             //bool success = false;
 
+
+
             UserModel myuser = new UserModel();
 
             //sql statement to check the users: the name and password
@@ -76,7 +78,68 @@ namespace GuardingUS30.Services
             return myuser;
         }
 
- 
+        //Method to find your user's name and password
+        public UserNotificationModel FindUserByNameandPasswordBeta(UserNotificationModel user)
+        {
+            //bool success = false;
+
+            UserNotificationModel myuser = new UserNotificationModel();
+            myuser.notification = new NotificationsModel();
+            myuser.user = new UserModel();
+
+            //sql statement to check the users: the name and password
+            string sqlStatement = "SELECT COUNT(n.idnotification) as 'mymessages', u.iduser, u.[password], u.idrole , u.[name] from usernotifications n join users u on n.iduser = u.iduser WHERE n.iduser=2 AND n.[status]= 0 AND u.[status]=0 GROUP BY u.[name] , u.iduser, u.[password], u.idrole";
+
+            //convert sql Statement to a Sql connection
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                //create a command that comes with the sql statement and the connection
+                SqlCommand command = new SqlCommand(sqlStatement, connection);
+
+                //Add two parameters, whihc are the username and password
+                command.Parameters.Add("@name", System.Data.SqlDbType.VarChar, 100).Value = user.user.name;
+                command.Parameters.Add("@password", System.Data.SqlDbType.VarChar, 50).Value = user.user.password;
+
+                try
+                {
+                    //You open the connection
+                    connection.Open();
+
+                    //Use sql data reader to read the username and password
+                    SqlDataReader reader = command.ExecuteReader();
+
+
+
+                    while (reader.Read())
+                    {
+
+                        myuser.user.iduser = (int)reader["iduser"];
+                        myuser.user.name = (string)reader["name"];
+                        myuser.user.idrole = (int)reader["idrole"];
+                        myuser.user.password = (string)reader["password"];
+                        myuser.mymessages = (string)reader["mymessages"];
+                    }
+
+
+
+
+                }
+                catch (Exception e)
+                {
+                    //Error Message
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    //Close the connection
+                    connection.Close();
+                }
+
+
+            }
+            return myuser;
+        }
+
 
 
 
@@ -130,9 +193,10 @@ namespace GuardingUS30.Services
             return success;
         }
 
-       
 
-        
+
+
+
     }
 
 

@@ -28,6 +28,16 @@ namespace GuardingUS30.Controllers
             return View();
         }
 
+        public IActionResult SecurityGuardView()
+        {
+            return View();
+        }
+
+        public IActionResult AdminView()
+        {
+            return View();
+        }
+
         //A method to check if the User logged in correctly
         public IActionResult ProcessLogin(UserModel userModel)
         {
@@ -35,20 +45,23 @@ namespace GuardingUS30.Controllers
             UsersDAO usersDAO = new UsersDAO();
 
             //if statement to know if the User exists or not. If the user is inside of the database or not.
+            //UserModel user = usersDAO.FindUserByNameandPassword(userModel);
+
             UserModel user = usersDAO.FindUserByNameandPassword(userModel);
+
 
             switch (user.idrole)
             {
                 case 1:
-                    return View("LoginSuccess", userModel);
+                    return View("ResidentView", user);
                 case 2:
-                    return View("AdminView", userModel);
+                    return View("AdminView", user);
                 
                 case 3:
-                    return View("SecurityGuardView", userModel);
+                    return View("SecurityGuardView", user);
                     
                 default:
-                    return View("LoginFailure", userModel);
+                    return View("LoginFailure", user);
                    
             }
            
@@ -223,16 +236,6 @@ namespace GuardingUS30.Controllers
             return View("AdminView");
         }
 
-        /*
-        public IActionResult EditHomeViewv2(int id)
-        {
-            UserHomeModel userhomeModel = new UserHomeModel();
-            AdminDAO adminDAO = new AdminDAO();
-
-
-            return View(adminDAO.ReadHomes().Find(userhomeModel => userhomeModel.homeModel.idhome == id));
-        }
-        */
 
         //Action go to Edit Home View
         public IActionResult EditHomeView(int id)
@@ -319,10 +322,25 @@ namespace GuardingUS30.Controllers
         //Action to go to Entrance/Exit View 
         public IActionResult EntrancesExitsView()
         {
-            
-            return View();
+
+            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
+            //Make listo to get the roles
+            List<GuardingUS30.Models.VisitorsHomeModel> everyone = guardDAO.ReadVisitors();
+
+            return View("EntrancesExitsView", everyone);
         }
-        
+
+        //Action to go to Entrance/Exit View 
+        public IActionResult EntrancesExits2View()
+        {
+
+            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
+            //Make listo to get the roles
+            List<GuardingUS30.Models.VisitorsHomeModel> everyone = guardDAO.ReadVisitors();
+
+            return View("EntrancesExits2View", everyone);
+        }
+
         //Action to go to add entrance View
         public IActionResult AddEntranceView2()
         {
@@ -379,30 +397,17 @@ namespace GuardingUS30.Controllers
             return Json(new SelectList(numberlist,"idhome", "number"));
         }
 
-        
-        
-        [HttpPost]
-        //Method to be able to get all the visitor's information (including the idhome)
-        public IActionResult AddEntranceView(IFormCollection formCollection)
+        //Mehtod to select the number of home once the address has been selected first
+        public JsonResult GetHomeNumber(string idhome)
         {
-           
-
-            var idhome = HttpContext.Request.Form["name"].ToString();
-
-            List<String> addresslist = new List<String>();
-
-            foreach (var address in _context.Home.GroupBy(p => p.address).Select(p => new { address = p.Key }).ToArray())
-            {
-                addresslist.Add(address.address);
-            }
-
-            ViewBag.ListofHome = addresslist;
 
 
+            var homenumber = _context.Home.Where(x => x.idhome == int.Parse(idhome)).Select(x=> new { x.idhome }).ToList();
 
-            return View();
+            
+
+            return Json(new SelectList(homenumber, "idhome"));
         }
-
 
 
 
@@ -410,16 +415,130 @@ namespace GuardingUS30.Controllers
         public IActionResult AddEntranceProcess(VisitorsHomeModel myvisitorModel)
         {
 
-            AdminDAO adminDAO = new AdminDAO();
+            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
 
             //Apply the method to insert a visitor's entrance on the database
-            adminDAO.InsertVisitor(myvisitorModel);
+            guardDAO.InsertVisitor(myvisitorModel);
 
 
 
             return View("SecurityGuardView");
         }
 
+        //Action to Update Visitor
+        public IActionResult UpdateVisitor(int id)
+        {
+            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
 
+            guardDAO.UpdateExit(id);
+
+            //list with user and home information
+            List<GuardingUS30.Models.VisitorsHomeModel> everyone = guardDAO.ReadVisitors();
+            //  List<RoleModel> roles = adminDAO.ReadRoles();
+
+            return View("EntrancesExitsView", everyone);
+        }
+
+        public IActionResult NotificationView(int iduser)
+        {
+            UserNotificationModel myuser = new UserNotificationModel();
+            myuser.user = new UserModel();
+            myuser.notification = new NotificationsModel();
+            myuser.notification.iduser = iduser;
+
+
+
+            // display the notification form.  Step 1 in sending a notification.
+            return View(myuser);
+        }
+
+        //Action to add a notification 
+        public IActionResult NotificationProcess(UserNotificationModel userNotificationModel)
+        {
+            // step 2 in sending notification.
+            // show a list of users. Check the users you want to send the message to.
+
+            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
+
+            //Apply the method to insert a visitor's entrance on the database
+            int notid = guardDAO.InsertNotification(userNotificationModel);
+
+
+            SecurityGuardDAO guardDAO2 = new SecurityGuardDAO();
+
+            //List to get the users
+            // List<GuardingUS30.Models.UserNotificationModel> everyone = guardDAO2.ReadUsers(notid);
+
+          
+
+            var everyone = guardDAO2.ReadUsers(notid);
+
+
+            UserNotificationListViewModel notificationList = new UserNotificationListViewModel();
+            notificationList.NotificationsList = new List<UserNotificationModel>();
+
+            foreach (var item in everyone)
+            {
+                notificationList.NotificationsList.Add(item);
+            }
+            return View("SendNotificationView", notificationList);
+        }
+
+
+        
+        public IActionResult SendNotificationProcess(UserNotificationListViewModel userNotificationListViewModel)
+        {
+
+            // step 3 - not visible to the user.  Background process.
+            // process each checked user.  Add a notification to the db.
+
+            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
+
+            foreach (var user in userNotificationListViewModel.NotificationsList)
+            {
+                //Apply the method to send a user the notification on the database
+                guardDAO.SendUser(user);
+            }
+
+            return View("SecurityGuardView");
+        }
+
+        public IActionResult Notification2View()
+        {
+            return View();
+        }
+
+        //Action to add a notification 
+        public IActionResult NotificationProcess2(UserNotificationModel userNotificationModel)
+        {
+
+            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
+
+            //Apply the method to insert a visitor's entrance on the database
+            int notid = guardDAO.InsertNotification(userNotificationModel);
+
+            SecurityGuardDAO guardDAO2 = new SecurityGuardDAO();
+
+            //List to get the users
+            List<GuardingUS30.Models.UserNotificationModel> everyone = guardDAO2.ReadUsers(notid);
+
+            return View("SendNotification2View", everyone);
+        }
+
+
+
+        public IActionResult SendNotificationProcess2(List<UserNotificationModel> userNotificationModel)
+        {
+
+            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
+
+            foreach (var user in userNotificationModel)
+            {
+                //Apply the method to send a user the notification on the database
+                guardDAO.SendUser(user);
+            }
+
+            return View("SecurityGuardView");
+        }
     }
 }

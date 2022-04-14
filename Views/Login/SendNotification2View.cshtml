@@ -1,0 +1,52 @@
+﻿@model List<GuardingUS30.Models.UserNotificationModel>
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Notification</title>
+</head>
+<body>
+    <h4>Choosing a User</h4>
+    <hr />
+    @using (Html.BeginForm("SendNotificationProcess", "Login", FormMethod.Post, new { id = "form1" }))
+    {
+        <table cellpadding="0" cellspacing="0" style="width:70%">
+
+            <tr>
+                <th></th>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>Phonenumber</th>
+
+
+            </tr>
+
+            @foreach (UserNotificationModel user in Model)
+            {
+                <tr>
+                    <td><input type="checkbox" class="form-control" value="@user.user.iduser"/></td>
+                    <td>@user.user.name</td>
+                    <td>@user.user.email</td>
+                    <td>@user.user.phonenumber</td>
+
+                </tr>
+            }
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <input type="submit" value="Send" class="btn btn-primary" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="form-group">
+            <input type="submit" value="Send Everyone" class="btn btn-primary" />
+        </div>
+    }
+    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="AdminView">Cancel</a>
+
+</body>
+</html>

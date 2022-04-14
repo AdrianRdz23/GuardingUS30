@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace GuardingUS30.Models
 {
-    public class NotificationModel
+    public class NotificationsModel
     {
-        public int idnotification {get; set;}
+
+        [Key]
+        public int idnotification { get; set; }
 
         public string title { get; set; }
+
+        public int iduser { get; set; }
 
         public string message { get; set; }
 
         //status of the user
-        public bool status { get; set; }
+        public byte status { get; set; }
 
         //date when the user has been created
         public DateTime startDate { get; set; }

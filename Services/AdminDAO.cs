@@ -246,21 +246,13 @@ namespace GuardingUS30.Services
                     while (reader.Read())
                     {
                         UserModel user = new UserModel();
-                        //userole.userModel = new UserModel();
-                        //userole.roleModel = new RoleModel();
+
 
 
                         user.iduser = (int)reader["iduser"];
                         user.name = (string)reader["name"];
-                        user.email = (string)reader["email"];
-                        user.phonenumber = (string)reader["phonenumber"];
                         user.idrole = (int)reader["idrole"];
-                       //userole.roleModel.name = (string)reader["name"];
                         user.password = (string)reader["password"];
-                        //userole.userModel.status = Convert.ToBoolean(reader["status"]);
-                        user.startDate = (DateTime)reader["startDate"];
-                        user.modificationDate = (DateTime)reader["modificationDate"];
-                        //userole.userModel.idrole = (int)reader["idrole"];
 
                         //Add all the users to the list
                         list.Add(user);
@@ -286,7 +278,9 @@ namespace GuardingUS30.Services
             }
             return list;
         }
-        
+
+
+
         //Method to read all the users 
         public List<UserRoleModel> ReadUsersv2()
         {
@@ -1169,59 +1163,6 @@ namespace GuardingUS30.Services
             return list;
         }
 
-        //Method to add visitor in your datasbase
-        public bool InsertVisitor(VisitorsHomeModel visitor)
-        {
-            bool success = false;
-            try
-            {
-
-                //sql statement to add users
-                string sqlStatement = "INSERT visitors ([name], carPlate, entrance, [exit], identification, idhome, [description],[status],startDate, modificationDate) VALUES (@name,@carPlate,GETDATE(),cast(-53690 as datetime),@identification,@idhome,@description,0,GETDATE(),cast(-53690 as datetime));";
-
-                //convert sql Statement to a Sql connection
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    //create a command that comes with the sql statement and the connection
-                    SqlCommand command = new SqlCommand(sqlStatement, connection);  
-
-                    //Add parameters
-                    command.Parameters.Add("@name", System.Data.SqlDbType.VarChar, 100).Value = visitor.visitors.name;
-                    command.Parameters.Add("@carPlate", System.Data.SqlDbType.VarChar).Value = visitor.visitors.carPlate;
-                    //command.Parameters.Add("@entrance", System.Data.SqlDbType.DateTime).Value = visitor.visitors.entrance;
-                    //command.Parameters.Add("@exit", System.Data.SqlDbType.DateTime).Value = visitor.visitors.exit;
-                    command.Parameters.Add("@identification", System.Data.SqlDbType.VarChar, 200).Value = visitor.visitors.identification;
-                    command.Parameters.Add("@idhome", System.Data.SqlDbType.Int).Value = visitor.visitors.idhome;
-                    command.Parameters.Add("@description", System.Data.SqlDbType.VarChar, 200).Value = visitor.visitors.description;
-
-
-                    try
-                    {
-                        //Open the connection
-                        connection.Open();
-
-                        //Apply the query that you typed, which is your sql statement
-                        command.ExecuteNonQuery();
-
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    finally
-                    {
-                        //Close the connection
-                        connection.Close();
-                    }
-
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            return success;
-        }
 
 
     }

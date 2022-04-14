@@ -1,0 +1,53 @@
+﻿@model GuardingUS30.Models.UserNotificationModel
+<style>
+    textarea{
+        resize: none;
+    }
+</style>
+<h4>Notification</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="NotificationProcess">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="notification.title" class="control-label"></label>
+                <input asp-for="notification.title" class="form-control" />
+                <span asp-validation-for="notification.title" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="notification.iduser" class="control-label"></label>
+                <input asp-for="notification.iduser" class="form-control" value="@Model.notification.iduser"/>
+                <span asp-validation-for="notification.iduser" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="notification.message" class="control-label"></label>
+                <textarea asp-for="notification.message" class="form-control" ></textarea>
+                <span asp-validation-for="notification.message" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="notification.status" class="control-label"></label>
+                <input asp-for="notification.status" class="form-control" />
+                <span asp-validation-for="notification.status" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="notification.startDate" class="control-label"></label>
+                <input asp-for="notification.startDate" class="form-control" />
+                <span asp-validation-for="notification.startDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="notification.modificationDate" class="control-label"></label>
+                <input asp-for="notification.modificationDate" class="form-control" />
+                <span asp-validation-for="notification.modificationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Next" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

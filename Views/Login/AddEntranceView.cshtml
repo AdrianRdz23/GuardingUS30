@@ -29,6 +29,32 @@
             });
         });
     </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#home_number').change(function () {
+                var url = '@Url.Content("~/")' + "Login/GetHomeNumber";
+                var ddlsource = "#home_number";
+                var items = "<option value='0'>Select</option>";
+                var homevalue = '';
+                $.getJSON(url, { idhome: $(ddlsource).val() }, function (data) {
+                    $.each(data, function (i, visitor) {
+                        //visitor.value = visitor.text;
+                        homevalue = visitor.text.substring(visitor.text.indexOf('=') + 2, visitor.text.indexOf('}') - 1);
+                        console.log(homevalue);
+                        
+                   
+                        var homenumber = parseInt(homevalue);
+                      //  $('#idhome').value = homenumber;
+                       document.getElementById("idhome").value = homenumber;
+                         
+                       // alert(homevalue);
+                        //homevalue.value = visitor.text;
+                    });
+          
+                });
+            });
+        });
+    </script>
 
 }
 <div class="row">
@@ -57,12 +83,16 @@
                 <span asp-validation-for="home.address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="visitors.idhome" class="control-label">Number</label>
-                <select asp-for="visitors.idhome" id="home_number" name="home_number" class="form-control" asp-items="@(new SelectList(string.Empty,"idhome","number"))">
+                <label class="control-label">Number</label>
+                <select id="home_number" name="home_number" class="form-control" asp-items="@(new SelectList(string.Empty,"idhome","number"))">
                 </select>
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="visitors.idhome" class="control-label"></label>
+                <input asp-for="visitors.idhome" type="number" id="idhome" class="form-control" />
                 <span asp-validation-for="visitors.idhome" class="text-danger"></span>
             </div>
-
             <div class="form-group" hidden>
                 <label asp-for="visitors.entrance" class="control-label"></label>
                 <input asp-for="visitors.entrance" class="form-control" />
