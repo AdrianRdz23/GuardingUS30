@@ -1,4 +1,4 @@
-﻿@model List<GuardingUS30.Models.UserNotificationModel>
+﻿@model GuardingUS30.Models.UserNotificationListViewModel
 
 
 <!DOCTYPE html>
@@ -11,7 +11,7 @@
 <body>
     <h4>Choosing a User</h4>
     <hr />
-    @using (Html.BeginForm("SendNotificationProcess", "Login", FormMethod.Post, new { id = "form1" }))
+    @using (Html.BeginForm("SendNotificationProcess2", "Login", FormMethod.Post, new { id = "form1" }))
     {
         <table cellpadding="0" cellspacing="0" style="width:70%">
 
@@ -24,26 +24,27 @@
 
             </tr>
 
-            @foreach (UserNotificationModel user in Model)
+            @for (int i = 0; i < Model.NotificationsList.Count(); i++)
             {
                 <tr>
-                    <td><input type="checkbox" class="form-control" value="@user.user.iduser"/></td>
-                    <td>@user.user.name</td>
-                    <td>@user.user.email</td>
-                    <td>@user.user.phonenumber</td>
-
+                    @Html.HiddenFor(model => model.NotificationsList[i].notification.idnotification)
+                    @Html.HiddenFor(model => model.NotificationsList[i].user.iduser)
+                    <td>@Html.CheckBoxFor(model => model.NotificationsList[i].notification.IsSelected)</td>
+                    <td>@Html.TextBoxFor(model => model.NotificationsList[i].user.name)</td>
+                    <td>@Html.TextBoxFor(model => model.NotificationsList[i].user.email)</td>
+                    <td>@Html.TextBoxFor(model => model.NotificationsList[i].user.phonenumber)</td>
                 </tr>
             }
             <tr>
                 <td>
                     <div class="form-group">
-                        <input type="submit" value="Send" class="btn btn-primary" />
+                        <input type="submit" value="Send" name="action" class="btn btn-primary" />
                     </div>
                 </td>
             </tr>
         </table>
         <div class="form-group">
-            <input type="submit" value="Send Everyone" class="btn btn-primary" />
+            <input type="submit" value="Send Everyone" name="action" class="btn btn-primary" />
         </div>
     }
     <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="AdminView">Cancel</a>

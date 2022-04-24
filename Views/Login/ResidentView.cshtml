@@ -10,14 +10,21 @@
             }
         </style>
     </head>
-<div>
-    <h4>Resident View</h4>
-    <hr />
+    <div>
+        <h4>Resident View</h4>
+        <hr />
 
-    <h1>Welcome to the GuardingUS App</h1>
+        <h1>Welcome @Model.name to the GuardingUS App</h1>
 
-    <div class="center">
-        <button>Notifications</button>
+        <form asp-action="SeeNotificationView">
+            <div class="center">
+                <div class="form-group" hidden>
+                    <label asp-for="iduser" class="control-label"></label>
+                    <input asp-for="iduser" class="form-control" />
+                    <span asp-validation-for="iduser" class="text-danger"></span>
+                </div>
+                <button type="submit">Notifications</button>
+            </div>
+        </form>
+
     </div>
-
-</div>

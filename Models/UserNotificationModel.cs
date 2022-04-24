@@ -9,6 +9,8 @@ namespace GuardingUS30.Models
     public class UserNotificationModel
     {
 
+        public int iduser { get; set; }
+
         //Create a visitor Model
         public UserModel user { get; set; }
 

@@ -16,9 +16,16 @@
 
         <h1>Welcome to the GuardingUS App</h1>
 
-        <div class="center">
-            <a asp-controller="Login" asp-action="Notification2View">Notifications</a>
-        </div>
+        <form asp-action="Notification2View">
+            <div class="center">
+                <div class="form-group" hidden>
+                    <label asp-for="iduser" class="control-label"></label>
+                    <input asp-for="iduser" class="form-control" />
+                    <span asp-validation-for="iduser" class="text-danger"></span>
+                </div>
+                <button type="submit">Notifications</button>
+            </div>
+        </form>
         <div class="center">
             <a asp-controller="Login" asp-action="AdminCatalog">Administrating Catalogs</a>
         </div>

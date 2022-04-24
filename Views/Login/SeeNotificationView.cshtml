@@ -1,0 +1,36 @@
+﻿@model List<GuardingUS30.Models.UserNotificationModel> 
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Your Notifications</title>
+</head>
+<body>
+    <h4>Your Notifications</h4>
+    <hr />
+    <table cellpadding="0" cellspacing="0" style="width:70%">
+        <tr>
+            <th>Title</th>
+            <th>Sender</th>
+
+
+
+        </tr>
+
+        @foreach (UserNotificationModel notification in Model)
+        {
+    <tr>
+        <td>@notification.notification.idnotification</td>
+        <td>@notification.notification.title</td>
+        <td>@notification.user.name</td>
+        <td><a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="MessageView" asp-route-id="@notification.notification.idnotification"  asp-route-username="@notification.iduser">View</a></td>
+        <td><a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="DeleteNotification" asp-route-id="@notification.notification.idnotification" asp-route-username="@notification.iduser">Delete</a></td>
+    </tr>
+        }
+
+    </table>
+
+
+</body>
+</html>

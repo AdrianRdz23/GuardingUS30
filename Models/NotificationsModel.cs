@@ -18,6 +18,8 @@ namespace GuardingUS30.Models
 
         public string message { get; set; }
 
+        public bool IsSelected { get; set; }
+
         //status of the user
         public byte status { get; set; }
 

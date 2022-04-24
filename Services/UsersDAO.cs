@@ -193,7 +193,194 @@ namespace GuardingUS30.Services
             return success;
         }
 
+        public List<UserNotificationModel> ReadNotifications(UserNotificationModel user)
+        {
+            //bool success = false;
 
+            List<UserNotificationModel> list = new List<UserNotificationModel>();
+
+            //sql statement to check the users: the name and password
+            string sqlStatement = "SELECT un.iduser, u.iduser as senduser, n.idnotification, n.title, u.[name] from usernotifications un join notifications n on  un.idnotification = n.idnotification join users u on n.iduser = u.iduser WHERE un.iduser=@iduser AND un.[status] in (0,1)";
+
+            //convert sql Statement to a Sql connection
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                //create a command that comes with the sql statement and the connection
+                SqlCommand command = new SqlCommand(sqlStatement, connection);
+
+                command.Parameters.Add("@iduser", System.Data.SqlDbType.Int).Value = user.user.iduser;
+
+
+                try
+                {
+                    //You open the connection
+                    connection.Open();
+
+                    //Use sql data reader to read 
+                    SqlDataReader reader = command.ExecuteReader();
+
+
+
+                    while (reader.Read())
+                    {
+
+                        UserNotificationModel myuser = new UserNotificationModel();
+                        myuser.user = new UserModel();
+                        myuser.notification = new NotificationsModel();
+
+                        myuser.iduser = (int)reader["iduser"];
+                        myuser.user.iduser = (int)reader["senduser"];
+                        myuser.notification.idnotification = (int)reader["idnotification"];
+                        myuser.user.name = (string)reader["name"];
+                        myuser.notification.title = (string)reader["title"];
+                        
+
+                        list.Add(myuser);
+
+                    }
+
+
+
+
+                }
+                catch (Exception e)
+                {
+                    //Error Message
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    //Close the connection
+                    connection.Close();
+                }
+
+
+            }
+            return list;
+        }
+
+        //Method to find home by id
+        public UserNotificationModel findMessageById(int id,int id2)
+        {
+            //Create a model for home 
+            UserNotificationModel notification = new UserNotificationModel();
+            notification.user = new UserModel();
+            notification.notification = new NotificationsModel();
+
+
+            //sql statement to find home
+            string sqlStatement = "SELECT n.title, u.[name], n.[message], n.startDate as notificationDate from usernotifications un join notifications n on  un.idnotification = n.idnotification join users u on n.iduser = u.iduser WHERE un.iduser=@iduser AND n.[status] in (0,1) AND n.idnotification=@idnotification";
+
+            //convert sql Statement to a Sql connection
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                //create a command that comes with the sql statement and the connection
+                SqlCommand command = new SqlCommand(sqlStatement, connection);
+
+                //Add parameters
+                command.Parameters.Add("@iduser", System.Data.SqlDbType.Int).Value = id2;
+                command.Parameters.Add("@idnotification", System.Data.SqlDbType.Int).Value = id;
+                
+
+
+
+                try
+                {
+                    //You open the connection
+                    connection.Open();
+
+                    //Use sql data reader to read 
+                    SqlDataReader reader = command.ExecuteReader();
+
+
+                    //While method to get home's information
+                    while (reader.Read())
+                    {
+
+
+                        notification.notification.title = (string)reader["title"];
+                        notification.notification.message = (string)reader["message"];
+                        notification.user.name = (string)reader["name"];
+                        notification.notification.startDate = (DateTime)reader["notificationDate"];
+
+                        //list.Add(myuser);
+
+                    }
+
+
+
+
+                }
+                catch (Exception e)
+                {
+                    //Error Message
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    //Close the connection
+                    connection.Close();
+                }
+
+
+            }
+            return notification;
+        }
+
+        public bool DeleteNotification(int id,int id2)
+        {
+
+            bool success = false;
+            try
+            {
+
+                //sql statement to add users
+                //string sqlStatement = "DELETE FROM users WHERE iduser=@iduser";
+                string sqlStatement = "UPDATE usernotifications set [status]=2, modificationDate=GETDATE() WHERE idnotification=@idnotification AND iduser=@iduser";
+
+
+
+                //convert sql Statement to a Sql connection
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    //create a command that comes with the sql statement and the connection
+                    SqlCommand command = new SqlCommand(sqlStatement, connection);
+
+                    //Add two parameters: name and the idrole
+                    command.Parameters.Add("@idnotification", System.Data.SqlDbType.Int).Value = id;
+                    command.Parameters.Add("@iduser", System.Data.SqlDbType.Int).Value = id2;
+
+
+
+
+
+                    try
+                    {
+                        //Open the connection
+                        connection.Open();
+
+                        //Apply the query that you typed, which is your sql statement
+                        command.ExecuteNonQuery();
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    finally
+                    {
+                        //Close the connection
+                        connection.Close();
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return success;
+        }
 
 
 

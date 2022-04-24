@@ -1,6 +1,6 @@
 ﻿@model GuardingUS30.Models.UserNotificationModel
 <style>
-    textarea{
+    textarea {
         resize: none;
     }
 </style>
@@ -15,9 +15,14 @@
                 <input asp-for="notification.title" class="form-control" />
                 <span asp-validation-for="notification.title" class="text-danger"></span>
             </div>
+            <div class="form-group" hidden>
+                <label asp-for="notification.iduser" class="control-label"></label>
+                <input asp-for="notification.iduser" class="form-control" value="@Model.notification.iduser" />
+                <span asp-validation-for="notification.iduser" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="notification.message" class="control-label"></label>
-                <textarea asp-for="notification.message" class="form-control" id="mynotification"></textarea>
+                <textarea asp-for="notification.message" class="form-control"></textarea>
                 <span asp-validation-for="notification.message" class="text-danger"></span>
             </div>
             <div class="form-group" hidden>
@@ -41,7 +46,6 @@
         </form>
     </div>
 </div>
-
 
 
 @section Scripts {

@@ -131,6 +131,7 @@ namespace GuardingUS30.Services
                 //create a command that comes with the sql statement and the connection
                 SqlCommand command = new SqlCommand(sqlStatement, connection);
 
+
                 try
                 {
                     //You open the connection

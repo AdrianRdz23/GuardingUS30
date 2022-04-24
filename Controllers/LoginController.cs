@@ -64,8 +64,33 @@ namespace GuardingUS30.Controllers
                     return View("LoginFailure", user);
                    
             }
-           
+
         }
+
+        
+        public IActionResult SeeNotificationView(int iduser)
+        {
+            UserNotificationModel myuser = new UserNotificationModel();
+            myuser.user = new UserModel();
+            myuser.user.iduser = iduser;
+            myuser.notification = new NotificationsModel();
+
+            myuser.iduser = iduser;
+
+
+
+            UsersDAO usersDAO = new UsersDAO();
+
+            
+            List<GuardingUS30.Models.UserNotificationModel> notifications = usersDAO.ReadNotifications(myuser);
+
+            
+
+
+            // display the notification form.  Step 1 in sending a notification.
+            return View(notifications);
+        }
+
 
         //An action to go to Admin Catalog View
         public IActionResult AdminCatalog()
@@ -441,10 +466,12 @@ namespace GuardingUS30.Controllers
 
         public IActionResult NotificationView(int iduser)
         {
+            //Get just the id of the one who is about to create a message and send it to the residents
             UserNotificationModel myuser = new UserNotificationModel();
             myuser.user = new UserModel();
             myuser.notification = new NotificationsModel();
             myuser.notification.iduser = iduser;
+
 
 
 
@@ -468,9 +495,7 @@ namespace GuardingUS30.Controllers
 
             //List to get the users
             // List<GuardingUS30.Models.UserNotificationModel> everyone = guardDAO2.ReadUsers(notid);
-
-          
-
+   
             var everyone = guardDAO2.ReadUsers(notid);
 
 
@@ -491,54 +516,158 @@ namespace GuardingUS30.Controllers
 
             // step 3 - not visible to the user.  Background process.
             // process each checked user.  Add a notification to the db.
-
-            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
-
-            foreach (var user in userNotificationListViewModel.NotificationsList)
+            if (Request.Form["action"] == "Send")
             {
-                //Apply the method to send a user the notification on the database
-                guardDAO.SendUser(user);
-            }
+                SecurityGuardDAO guardDAO = new SecurityGuardDAO();
 
+                foreach (var user in userNotificationListViewModel.NotificationsList)
+                {
+                    if (user.notification.IsSelected == true)
+                    {
+                        //Apply the method to send a user the notification on the database
+                        guardDAO.SendUser(user);
+                    }
+                }
+            }
+            else if (Request.Form["action"] == "Send Everyone")
+            {
+                SecurityGuardDAO guardDAO = new SecurityGuardDAO();
+
+                foreach (var user in userNotificationListViewModel.NotificationsList)
+                {
+                    //Apply the method to send a user the notification on the database
+                    guardDAO.SendUser(user);
+                }
+            }
             return View("SecurityGuardView");
         }
 
-        public IActionResult Notification2View()
+        public IActionResult Notification2View(int iduser)
         {
-            return View();
+            //Get just the id of the one who is about to create a message and send it to the residents
+            UserNotificationModel myuser = new UserNotificationModel();
+            myuser.user = new UserModel();
+            myuser.notification = new NotificationsModel();
+            myuser.notification.iduser = iduser;
+
+
+
+
+            // display the notification form.  Step 1 in sending a notification.
+            return View(myuser);
         }
 
         //Action to add a notification 
         public IActionResult NotificationProcess2(UserNotificationModel userNotificationModel)
         {
 
+            // step 2 in sending notification.
+            // show a list of users. Check the users you want to send the message to.
+
             SecurityGuardDAO guardDAO = new SecurityGuardDAO();
 
             //Apply the method to insert a visitor's entrance on the database
             int notid = guardDAO.InsertNotification(userNotificationModel);
 
+
             SecurityGuardDAO guardDAO2 = new SecurityGuardDAO();
 
             //List to get the users
-            List<GuardingUS30.Models.UserNotificationModel> everyone = guardDAO2.ReadUsers(notid);
+            // List<GuardingUS30.Models.UserNotificationModel> everyone = guardDAO2.ReadUsers(notid);
 
-            return View("SendNotification2View", everyone);
+            var everyone = guardDAO2.ReadUsers(notid);
+
+
+            UserNotificationListViewModel notificationList = new UserNotificationListViewModel();
+            notificationList.NotificationsList = new List<UserNotificationModel>();
+
+            foreach (var item in everyone)
+            {
+                notificationList.NotificationsList.Add(item);
+            }
+            return View("SendNotification2View", notificationList);
         }
 
 
 
-        public IActionResult SendNotificationProcess2(List<UserNotificationModel> userNotificationModel)
+        public IActionResult SendNotificationProcess2(UserNotificationListViewModel userNotificationListViewModel)
         {
 
-            SecurityGuardDAO guardDAO = new SecurityGuardDAO();
 
-            foreach (var user in userNotificationModel)
+            // step 3 - not visible to the user.  Background process.
+            // process each checked user.  Add a notification to the db.
+            if (Request.Form["action"] == "Send")
             {
-                //Apply the method to send a user the notification on the database
-                guardDAO.SendUser(user);
-            }
+                SecurityGuardDAO guardDAO = new SecurityGuardDAO();
 
-            return View("SecurityGuardView");
+                foreach (var user in userNotificationListViewModel.NotificationsList)
+                {
+                    if (user.notification.IsSelected == true)
+                    {
+                        //Apply the method to send a user the notification on the database
+                        guardDAO.SendUser(user);
+                    }
+                }
+            }
+            else if (Request.Form["action"] == "Send Everyone")
+            {
+                SecurityGuardDAO guardDAO = new SecurityGuardDAO();
+
+                foreach (var user in userNotificationListViewModel.NotificationsList)
+                {
+                    //Apply the method to send a user the notification on the database
+                    guardDAO.SendUser(user);
+                }
+            }
+            return View("AdminView");
         }
+
+        //Method to see the complete message that the resident has received
+        public IActionResult MessageView(int id, string username)
+        {
+            //convert the id sender to int
+             int id2 = Int32.Parse(username);
+
+            UsersDAO usersDAO = new UsersDAO();
+
+            //Method to look for the message that the resident clicked
+            UserNotificationModel mymessage = usersDAO.findMessageById(id,id2);
+
+
+            
+
+            return View(mymessage);
+        }
+
+
+        //Action to Delete Notifications
+        public IActionResult DeleteNotification(int id, string username)
+        {
+            int id2 = Int32.Parse(username);
+
+            UsersDAO usersDAO = new UsersDAO();
+
+            usersDAO.DeleteNotification(id,id2);
+
+
+            UserNotificationModel myuser = new UserNotificationModel();
+            myuser.user = new UserModel();
+            myuser.user.iduser = id2;
+            myuser.notification = new NotificationsModel();
+
+            myuser.iduser = id2;
+
+
+
+            UsersDAO usersDAO2 = new UsersDAO();
+
+
+            List<GuardingUS30.Models.UserNotificationModel> notifications = usersDAO2.ReadNotifications(myuser);
+
+
+
+            return View("SeeNotificationView", notifications);
+        }
+
     }
 }
