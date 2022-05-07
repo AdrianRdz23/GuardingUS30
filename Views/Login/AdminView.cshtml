@@ -16,7 +16,7 @@
 
         <h1>Welcome to the GuardingUS App</h1>
 
-        <form asp-action="Notification2View">
+        <form asp-controller="Admin" asp-action="Notification2View">
             <div class="center">
                 <div class="form-group" hidden>
                     <label asp-for="iduser" class="control-label"></label>
@@ -27,10 +27,10 @@
             </div>
         </form>
         <div class="center">
-            <a asp-controller="Login" asp-action="AdminCatalog">Administrating Catalogs</a>
+            <a asp-controller="Admin" asp-action="AdminCatalog">Administrating Catalogs</a>
         </div>
         <div class="center">
-            <a asp-controller="Login" asp-action="EntrancesExits2View">Exits and Entrances History</a>
+            <a asp-controller="Admin" asp-action="EntrancesExits2View">Exits and Entrances History</a>
         </div>
 
     </div>

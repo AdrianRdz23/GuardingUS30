@@ -1,29 +1,76 @@
-﻿@model GuardingUS30.Models.UserModel
-    <head>
-        <style>
-            .center {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 200px;
-                
+﻿@model GuardingUS30.Models.UserNotificationModel
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .alert {
+            padding: 20px;
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .closebtn:hover {
+                color: black;
             }
-        </style>
-    </head>
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .notification {
+            background-color: #0066ff;
+            color: white;
+            padding: 15px 26px;
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            padding: 5px 10px;
+            border-radius: 50%;
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
     <div>
         <h4>Resident View</h4>
         <hr />
 
-        <h1>Welcome @Model.name to the GuardingUS App</h1>
+        <h1>Welcome @Model.user.name to the GuardingUS App</h1>
+        @if (Model.mymessages != 0)
+        {
+            <div class="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Info!</strong> You have @Model.mymessages messages that you have not read
+            </div>
+        }
 
-        <form asp-action="SeeNotificationView">
+        <form asp-controller="Resident" asp-action="SeeNotificationView">
             <div class="center">
-                <div class="form-group" hidden>
-                    <label asp-for="iduser" class="control-label"></label>
-                    <input asp-for="iduser" class="form-control" />
-                    <span asp-validation-for="iduser" class="text-danger"></span>
-                </div>
-                <button type="submit">Notifications</button>
+                <input type="hidden" asp-for="user.iduser" class="form-control" />
+                <button type="submit" class="notification">
+                    <span>Notifications</span>
+                    @if (Model.mymessages >= 1)
+                    {
+                        <span class="badge">@Model.mymessages</span>
+                    }
+                </button>
             </div>
         </form>
 

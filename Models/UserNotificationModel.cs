@@ -17,9 +17,9 @@ namespace GuardingUS30.Models
         //Create a home Model
         public NotificationsModel notification { get; set; }
 
-        public string mymessages { get; set; }
+        public int mymessages { get; set; }
 
-        public int status { get; set; }
+        public Byte status { get; set; }
 
     }
 }

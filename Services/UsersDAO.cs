@@ -83,12 +83,12 @@ namespace GuardingUS30.Services
         {
             //bool success = false;
 
-            UserNotificationModel myuser = new UserNotificationModel();
+              UserNotificationModel myuser = new UserNotificationModel();
             myuser.notification = new NotificationsModel();
             myuser.user = new UserModel();
 
             //sql statement to check the users: the name and password
-            string sqlStatement = "SELECT COUNT(n.idnotification) as 'mymessages', u.iduser, u.[password], u.idrole , u.[name] from usernotifications n join users u on n.iduser = u.iduser WHERE n.iduser=2 AND n.[status]= 0 AND u.[status]=0 GROUP BY u.[name] , u.iduser, u.[password], u.idrole";
+            string sqlStatement = "SELECT COUNT(n.idnotification) as 'mymessages', u.iduser, u.[password], u.idrole , u.[name] from usernotifications n join users u on n.iduser = u.iduser WHERE u.[name]=@name AND u.[password]=@password AND n.[status]= 0 AND u.[status]=0 GROUP BY u.[name] , u.iduser, u.[password], u.idrole";
 
             //convert sql Statement to a Sql connection
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -117,7 +117,7 @@ namespace GuardingUS30.Services
                         myuser.user.name = (string)reader["name"];
                         myuser.user.idrole = (int)reader["idrole"];
                         myuser.user.password = (string)reader["password"];
-                        myuser.mymessages = (string)reader["mymessages"];
+                        myuser.mymessages = (int)reader["mymessages"];
                     }
 
 
@@ -141,7 +141,67 @@ namespace GuardingUS30.Services
         }
 
 
+        //Method to find your user's name and password
+        public UserNotificationModel FindUserByNameandPasswordNoMessages(UserNotificationModel user)
+        {
+            //bool success = false;
 
+            UserNotificationModel myuser = new UserNotificationModel();
+            myuser.notification = new NotificationsModel();
+            myuser.user = new UserModel();
+
+            //sql statement to check the users: the name and password
+            string sqlStatement = "SELECT u.iduser, u.[password], u.idrole , u.[name] from usernotifications n join users u on n.iduser = u.iduser WHERE u.[name]=@name AND u.[password]=@password AND u.[status]=0 GROUP BY u.[name] , u.iduser, u.[password], u.idrole";
+
+            //convert sql Statement to a Sql connection
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                //create a command that comes with the sql statement and the connection
+                SqlCommand command = new SqlCommand(sqlStatement, connection);
+
+                //Add two parameters, whihc are the username and password
+                command.Parameters.Add("@name", System.Data.SqlDbType.VarChar, 100).Value = user.user.name;
+                command.Parameters.Add("@password", System.Data.SqlDbType.VarChar, 50).Value = user.user.password;
+
+                try
+                {
+                    //You open the connection
+                    connection.Open();
+
+                    //Use sql data reader to read the username and password
+                    SqlDataReader reader = command.ExecuteReader();
+
+
+
+                    while (reader.Read())
+                    {
+
+                        myuser.user.iduser = (int)reader["iduser"];
+                        myuser.user.name = (string)reader["name"];
+                        myuser.user.idrole = (int)reader["idrole"];
+                        myuser.user.password = (string)reader["password"];
+                        myuser.mymessages = (int)reader["mymessages"];
+                    }
+
+
+
+
+                }
+                catch (Exception e)
+                {
+                    //Error Message
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    //Close the connection
+                    connection.Close();
+                }
+
+
+            }
+            return myuser;
+        }
 
         //Method to create add user on the database
         public bool InsertUser(UserModel user)
@@ -200,7 +260,7 @@ namespace GuardingUS30.Services
             List<UserNotificationModel> list = new List<UserNotificationModel>();
 
             //sql statement to check the users: the name and password
-            string sqlStatement = "SELECT un.iduser, u.iduser as senduser, n.idnotification, n.title, u.[name] from usernotifications un join notifications n on  un.idnotification = n.idnotification join users u on n.iduser = u.iduser WHERE un.iduser=@iduser AND un.[status] in (0,1)";
+            string sqlStatement = "SELECT un.iduser, u.iduser as senduser, n.idnotification, n.title, u.[name], un.[status] as mystatus from usernotifications un join notifications n on  un.idnotification = n.idnotification join users u on n.iduser = u.iduser WHERE un.iduser=@iduser AND un.[status] in (0,1)";
 
             //convert sql Statement to a Sql connection
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -233,6 +293,7 @@ namespace GuardingUS30.Services
                         myuser.notification.idnotification = (int)reader["idnotification"];
                         myuser.user.name = (string)reader["name"];
                         myuser.notification.title = (string)reader["title"];
+                        myuser.status = (Byte)reader["mystatus"];
                         
 
                         list.Add(myuser);
@@ -352,6 +413,56 @@ namespace GuardingUS30.Services
 
 
 
+
+
+                    try
+                    {
+                        //Open the connection
+                        connection.Open();
+
+                        //Apply the query that you typed, which is your sql statement
+                        command.ExecuteNonQuery();
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    finally
+                    {
+                        //Close the connection
+                        connection.Close();
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return success;
+        }
+
+        public bool UpdateStatus(int id, int id2)
+        {
+
+            bool success = false;
+            try
+            {
+
+                //sql statement to add users
+                //string sqlStatement = "DELETE FROM roles WHERE idrole=@idrole";
+                string sqlStatement = "UPDATE usernotifications set [status]=1 WHERE iduser=@iduser AND idnotification=@idnotification";
+
+                //convert sql Statement to a Sql connection
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    //create a command that comes with the sql statement and the connection
+                    SqlCommand command = new SqlCommand(sqlStatement, connection);
+
+                    //Add parameter
+                    command.Parameters.Add("@iduser", System.Data.SqlDbType.Int).Value = id2;
+                    command.Parameters.Add("@idnotification", System.Data.SqlDbType.Int).Value = id;
 
 
                     try

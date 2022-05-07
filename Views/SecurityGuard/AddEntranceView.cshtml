@@ -16,7 +16,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#home_address').change(function () {
-                var url = '@Url.Content("~/")' + "Login/GetVisitorHomelist";
+                var url = '@Url.Content("~/")' + "SecurityGuard/GetVisitorHomelist";
                 var ddlsource = "#home_address";
                 $.getJSON(url, { address: $(ddlsource).val() }, function (data) {
                     var items = '';
@@ -32,7 +32,7 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#home_number').change(function () {
-                var url = '@Url.Content("~/")' + "Login/GetHomeNumber";
+                var url = '@Url.Content("~/")' + "SecurityGuard/GetHomeNumber";
                 var ddlsource = "#home_number";
                 var items = "<option value='0'>Select</option>";
                 var homevalue = '';

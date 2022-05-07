@@ -1,0 +1,67 @@
+﻿@model List<GuardingUS30.Models.UserNotificationModel> 
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Your Notifications</title>
+    <style>
+        .newmessage {
+            color: red;
+        }
+    </style>
+    @{
+    <script language="javascript" >
+        DoSomethingHere(){
+            
+            //history.go(-2);
+            alert("Si funciona");
+        }
+    </script>
+    }
+</head>
+<body onunload="DoSomethingHere()">
+    <h4>Your Notifications</h4>
+    <hr />
+    <table cellpadding="0" cellspacing="0" style="width:70%">
+        <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Sender</th>
+            
+
+
+
+        </tr>
+        
+
+        @foreach (UserNotificationModel notification in Model)
+        {
+    <tr>
+        
+        <td hidden>@notification.notification.idnotification</td>
+        @if (notification.status == 0)
+        {
+            <td class="newmessage">New</td>
+            <td>@notification.notification.title</td>
+            <td>@notification.user.name</td>
+            <td><a class="nav-link text-dark" asp-area="" asp-controller="Resident" asp-action="MessageView" asp-route-id="@notification.notification.idnotification" asp-route-username="@notification.iduser">View</a></td>
+            <td><a class="nav-link text-dark" asp-area="" asp-controller="Resident" asp-action="DeleteNotification" asp-route-id="@notification.notification.idnotification" asp-route-username="@notification.iduser">Delete</a></td>
+
+        }
+        else if(notification.status == 1)
+        {
+            <td></td>
+            <td>@notification.notification.title</td>
+            <td>@notification.user.name</td>
+            <td><a class="nav-link text-dark" asp-area="" asp-controller="Resident" asp-action="MessageView" asp-route-id="@notification.notification.idnotification" asp-route-username="@notification.iduser">View</a></td>
+            <td><a class="nav-link text-dark" asp-area="" asp-controller="Resident" asp-action="DeleteNotification" asp-route-id="@notification.notification.idnotification" asp-route-username="@notification.iduser">Delete</a></td>
+        }
+    </tr>
+        }
+
+    </table>
+
+
+</body>
+</html>

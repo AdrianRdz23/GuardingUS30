@@ -29,8 +29,8 @@
                 <td>@user.userModel.phonenumber</td>
                 <td>@user.userModel.email</td>
                 <td>@user.roleModel.name</td>
-                <td><a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="EditUserView" asp-route-id="@user.userModel.iduser">Edit</a></td>
-                <td><a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="DeleteUser" asp-route-id="@user.userModel.iduser">Delete</a></td>
+                <td><a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="EditUserView" asp-route-id="@user.userModel.iduser">Edit</a></td>
+                <td><a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="DeleteUser" asp-route-id="@user.userModel.iduser">Delete</a></td>
             </tr>
         }
 

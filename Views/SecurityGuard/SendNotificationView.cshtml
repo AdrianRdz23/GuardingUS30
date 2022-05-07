@@ -11,7 +11,7 @@
 <body>
     <h4>Choosing a User</h4>
     <hr />
-    @using (Html.BeginForm("SendNotificationProcess", "Login", FormMethod.Post, new { id = "form1" }))
+    @using (Html.BeginForm("SendNotificationProcess", "SecurityGuard", FormMethod.Post, new { id = "form1" }))
     {
         <table cellpadding="0" cellspacing="0" style="width:70%">
 
@@ -47,7 +47,7 @@
             <input type="submit" value="Send Everyone" name="action" class="btn btn-primary" />
         </div>
     }
-    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="SecurityGuardView">Cancel</a>
+    <a class="nav-link text-dark" asp-area="" asp-controller="SecurityGuard" asp-action="SecurityGuardView">Cancel</a>
 
 </body>
 </html>
